@@ -2,7 +2,7 @@
 
 ### How to Run
 
-0. This system is built using ROS melodic and Ubuntu 18.04.
+**Important**: This system is built using ROS melodic and Ubuntu 18.04. Please make sure you are on the same configuration.
 
 1. Please install AMBF in advance and make sure it is sourced correctly. Follow the instruction in this link/repo:
 
@@ -24,13 +24,13 @@ git clone --recursive https://github.com/JackHaoyingZhou/RBE501_final_project.gi
 For simplified model:
 ```bash
 cd <ambf_path>/bin/<your OS>
-./ambf_simulator -a <this_repository_path>/models/psm1_modify/default.yaml
+./ambf_simulator -a <this_repository_path>/RBE501_project/models/psm1_modify/default.yaml
 ```
 
 For full model:
 ```bash
 cd <ambf_path>/bin/<your OS>
-./ambf_simulator -a <this_repository_path>/models/psm_full/default.yaml
+./ambf_simulator -a <this_repository_path>/RBE501_project/models/psm_full/default.yaml
 ```
 
 4. Go to `<this_repository_path>/RBE501_project/scripts`
