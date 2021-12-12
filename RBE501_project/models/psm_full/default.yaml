@@ -64,9 +64,9 @@ BODY base link:
       p: 0
       y: 0
   passive: false
-  publish children names: false
-  publish joint names: false
-  publish joint positions: false
+  publish children names: true
+  publish joint names: true
+  publish joint positions: true
   friction:
     rolling: 0.01
     static: 0.5
@@ -719,10 +719,6 @@ JOINT base link-yaw link:
     low: -1.605
   enable feedback: false
   passive: false
-  controller:
-    P: 86.93533
-    I: 0.86935
-    D: 0.86935
   controller output type: VELOCITY
   type: revolute
   max motor impulse: 1.0
@@ -753,10 +749,6 @@ JOINT yaw link-pitch back link:
     low: -0.6109
   enable feedback: false
   passive: false
-  controller:
-    P: 157.97348
-    I: 1.57973
-    D: 1.57973
   controller output type: VELOCITY
   type: revolute
   max motor impulse: 0.05000000074505806
@@ -787,10 +779,6 @@ JOINT pitch back link-pitch bottom link:
     low: -0.942
   enable feedback: false
   passive: true
-  controller:
-    P: 528.68793
-    I: 5.28688
-    D: 5.28688
   controller output type: VELOCITY
   type: revolute
   max motor impulse: 0.05000000074505806
@@ -821,10 +809,6 @@ JOINT pitch bottom link-pitch end link:
     low: -0.936
   enable feedback: false
   passive: true
-  controller:
-    P: 527.42023
-    I: 5.2742
-    D: 5.2742
   controller output type: VELOCITY
   type: revolute
   max motor impulse: 0.05000000074505806
@@ -854,10 +838,6 @@ JOINT pitch end link-main insertion link:
     low: 0.0
   enable feedback: false
   passive: false
-  controller:
-    P: 7000.0
-    I: 70.0
-    D: 70.0
   controller output type: VELOCITY
   type: prismatic
   max motor impulse: 1.0
@@ -888,10 +868,6 @@ JOINT main insertion link-tool roll link:
     low: -3.0543
   enable feedback: false
   passive: false
-  controller:
-    P: 1.48221
-    I: 0.01482
-    D: 0.01482
   controller output type: VELOCITY
   type: revolute
   max motor impulse: 0.05000000074505806
@@ -922,10 +898,6 @@ JOINT tool roll link-tool pitch link:
     low: -1.571
   enable feedback: false
   passive: false
-  controller:
-    P: 10.95907
-    I: 0.10959
-    D: 0.10959
   controller output type: VELOCITY
   type: revolute
   max motor impulse: 0.05000000074505806
@@ -956,10 +928,6 @@ JOINT tool pitch link-tool gripper1 link:
     low: -1.5708
   enable feedback: false
   passive: false
-  controller:
-    P: 0.51294
-    I: 0.00513
-    D: 0.00513
   controller output type: VELOCITY
   type: revolute
   max motor impulse: 0.05000000074505806
@@ -1024,10 +992,6 @@ JOINT pitch back link-pitch top link:
     low: -0.942
   enable feedback: false
   passive: true
-  controller:
-    P: 579.58459
-    I: 5.79585
-    D: 5.79585
   controller output type: VELOCITY
   type: revolute
   max motor impulse: 0.05000000074505806
@@ -1058,10 +1022,6 @@ JOINT pitch top link-pitch end link:
     low: -1.0472
   enable feedback: false
   passive: true
-  controller:
-    P: 474.42755
-    I: 4.74428
-    D: 4.74428
   controller output type: VELOCITY
   type: revolute
   max motor impulse: 0.05000000074505806
@@ -1091,10 +1051,6 @@ JOINT yaw link-pitch end link:
     low: -1.2
   enable feedback: false
   passive: true
-  controller:
-    P: 10.0
-    I: 0.0
-    D: 1.0
   controller output type: VELOCITY
   type: p2p
   offset: -1.56899
@@ -1123,10 +1079,6 @@ JOINT yaw link-pitch front link:
     low: -0.936
   enable feedback: false
   passive: true
-  controller:
-    P: 195.4532
-    I: 1.95453
-    D: 1.95453
   controller output type: VELOCITY
   type: revolute
   max motor impulse: 1.0
@@ -1157,10 +1109,6 @@ JOINT pitch front link-pitch bottom link:
     low: -1.0472
   enable feedback: false
   passive: false
-  controller:
-    P: 249.67331
-    I: 2.49673
-    D: 2.49673
   controller output type: VELOCITY
   type: revolute
   max motor impulse: 0.05000000074505806
