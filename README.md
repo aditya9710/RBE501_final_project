@@ -30,7 +30,7 @@ cd <ambf_path>/bin/<your OS>
 It should look like:
 
 <p align="center">
-<img src=medis_and_results/psm_ambf_sample.png/>
+<img src=media_and_results/psm_ambf_sample.png/>
 </p>
 
 For full model:
@@ -42,7 +42,7 @@ cd <ambf_path>/bin/<your OS>
 It should look like:
 
 <p align="center">
-<img src=medis_and_results/psm_full_sample.png width="480"/>
+<img src=media_and_results/psm_full_sample.png width="480"/>
 </p>
 
 
