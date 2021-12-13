@@ -100,7 +100,7 @@ class connectionTestFull():
         self.base.set_joint_pos(4, jp[4])
         self.base.set_joint_pos(5, 0)
         self.base.set_joint_pos(6, 0)
-        rospy.sleep(0.01)
+        rospy.sleep(0.02)
 
     def measured_jp(self):
         j0 = self.base.get_joint_pos(0)
@@ -123,7 +123,7 @@ class connectionTestFull():
             coord = self.tip.get_pos()
             self.x.append(coord.x)
             self.y.append(coord.y)
-            self.z.append(coord.z - 0.0102) ## 0.0102m is the distance between the toolpitch link and the control point
+            self.z.append(coord.z - 0.0102) # 0.0102m is the distance between the toolpitch link and the control point
         else:
             pass
 
@@ -136,27 +136,31 @@ class connectionTestFull():
 
 
 if __name__ == '__main__':
-    # joint_file = 'JointPos_full_circle.csv'
+    ### draw a circle
+    joint_file = 'JointPos_full_circle.csv'
+    path_file = 'Path_full_circle.csv'
+
+    ### draw a straight line
     # joint_file = 'JointPos_full_line.csv'
-    joint_file = 'JointPos_full.csv'
-    path_file = 'Path_full.csv'
+    # path_file = 'Path_full_line.csv'
+
     c = Client()
     c.connect()
     Test = connectionTestFull(c, 'psm', joint_file)
     rate = rospy.Rate(200)
-    # # jp = 0
+
     # while not rospy.is_shutdown():
     #     try:
-    #         Test.run()
+    #         Test.servo_jp([0,0,0,0,0,0])
     #     except KeyboardInterrupt:
     #         print('stop!')
     #     rate.sleep()
-
-    n_iter = 0
-    while n_iter < 500:
-        x, y, z = Test.run()
-        n_iter = n_iter + 1
-        rate.sleep()
+    #
+    # n_iter = 0
+    # while n_iter < 500:
+    #     x, y, z = Test.run()
+    #     n_iter = n_iter + 1
+    #     rate.sleep()
 
     x_d, y_d, z_d = Test.load_path(path_file)
     fig = plt.figure(1)
@@ -165,7 +169,7 @@ if __name__ == '__main__':
     N_remove = 40
     ax.scatter3D(x[N_remove:], y[N_remove:], z[N_remove:], 'r', label='actual')
     ax.scatter3D(x_d[N_remove:], y_d[N_remove:], z_d[N_remove:], 'b', label='desired')
-    # ax.set_aspect('equal', 'box') can uncomment when plotting circle
+    # ax.set_aspect('equal', 'box') # can uncomment when plotting circle
     ax.legend(fontsize=16)
     ax.set_title('path', fontsize=24)
     ax.set_xlabel('X (m)', fontsize=20)
@@ -196,3 +200,5 @@ if __name__ == '__main__':
     ax3.set_xlabel('time (ms)', fontsize=14)
     ax3.set_ylabel('value (m)', fontsize=14)
     ax3.grid()
+
+    plt.show()

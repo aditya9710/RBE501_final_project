@@ -103,7 +103,7 @@ class connectionTest():
         self.base.set_joint_pos(5, jp[5])
         self.base.set_joint_pos(6, 0)
         self.base.set_joint_pos(7, 0)
-        rospy.sleep(0.02)
+        rospy.sleep(0.05)
 
     def servo_jf(self):
         self.base.set_joint_pos(0, 0)
@@ -162,17 +162,21 @@ if __name__ == '__main__':
     ### draw a circle
     # joint_file = 'JointPos_circle.csv'
     # path_file = 'Path_circle.csv'
+
     c = Client()
     c.connect()
     Test = connectionTest(c, 'psm1', joint_file)
     rate = rospy.Rate(200)
-    # while not rospy.is_shutdown():
-    #     try:
-    #         x, y, z = Test.run_pos()
-    #         # Test.run_gravity()
-    #     except KeyboardInterrupt:
-    #         print('stop!')
-    #     rate.sleep()
+
+    print('### Gravity Compensation ###')
+    while not rospy.is_shutdown():
+        try:
+            # Test.servo_jp([0,0,0,0,0,0])
+            Test.run_gravity()
+        except KeyboardInterrupt:
+            print('stop!')
+        rate.sleep()
+
     n_iter = 0
     while n_iter < 500:
         x, y, z = Test.run_pos()
@@ -186,7 +190,7 @@ if __name__ == '__main__':
     N_remove = 40
     ax.scatter3D(x[N_remove:], y[N_remove:], z[N_remove:], 'r', label='actual')
     ax.scatter3D(x_d[N_remove:], y_d[N_remove:], z_d[N_remove:], 'b', label='desired')
-    # ax.set_aspect('equal', 'box') can uncomment when plotting circle
+    # ax.set_aspect('equal', 'box') # can uncomment when plotting circle
     ax.legend(fontsize=16)
     ax.set_title('path', fontsize=24)
     ax.set_xlabel('X (m)', fontsize=20)
@@ -217,3 +221,5 @@ if __name__ == '__main__':
     ax3.set_xlabel('time (ms)', fontsize=14)
     ax3.set_ylabel('value (m)', fontsize=14)
     ax3.grid()
+
+    plt.show()
