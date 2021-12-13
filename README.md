@@ -27,11 +27,24 @@ cd <ambf_path>/bin/<your OS>
 ./ambf_simulator -a <this_repository_path>/RBE501_project/models/psm1_verticle/psm_model.yaml
 ```
 
+It should look like:
+
+<p align="center">
+  <img src=medis_and_results/psm_ambf_sample.png width="480"/>
+</p>
+
 For full model:
 ```bash
 cd <ambf_path>/bin/<your OS>
 ./ambf_simulator -a <this_repository_path>/RBE501_project/models/psm_full/default.yaml
 ```
+
+It should look like:
+
+<p align="center">
+  <img src=medis_and_results/psm_full_sample.png width="480"/>
+</p>
+
 
 4. Go to `<this_repository_path>/RBE501_project/scripts`
 
