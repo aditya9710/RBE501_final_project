@@ -17,7 +17,7 @@ First time cloning:
 git clone --recursive https://github.com/JackHaoyingZhou/RBE501_final_project.git
 ```
 
-3. Please double check your python packages. You may add corresponding if necessary. 
+3. Please double check your python packages. You may add corresponding packages if necessary. 
 
 4. Visualize the model in AMBF.
 
