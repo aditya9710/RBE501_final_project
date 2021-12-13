@@ -31,7 +31,7 @@ robot_wpisimplified = SerialLink([RevoluteMDH('a', 0, 'd', 0, 'alpha', pi/2, 'of
 
 qlim_wpisimplified = [-pi/3  pi/3;  % q(1)
         -pi/3  pi/3;  % q(2)
-     3*0.0254 15.0*0.0254;    % q(3)
+          0     0.24;    % q(3)
          -pi    pi;  % q(4)
         -pi/2  pi/2;  % q(5)
         -pi/3  pi/3;  % q(6)
@@ -178,13 +178,14 @@ end
 NPts = 500;
 
 t = linspace(-pi, pi, NPts);
-x = 0.05*cos(t);
-y = 0.05*sin(t);
-z = -0.05*ones(1,NPts);
-% x = -0.04*ones(1,NPts);
-% y = linspace(-0.01,0.06, NPts);
-% z = -0.08*ones(1,NPts);
+% x = 0.05*cos(t);
+% y = 0.05*sin(t);
+% z = -0.05*ones(1,NPts);
+x = -0.04*ones(1,NPts);
+y = linspace(-0.01,0.06, NPts);
+z = -0.08*ones(1,NPts);
 path = [x; y; z];
+csvwrite('Path_full.csv',path')
 
 figure(1)
 set(gcf,'Position',[50 50 800 600])
@@ -354,7 +355,7 @@ qlim_wpi = [ -pi/3  pi/3;  % q(1)
             0  0;       % q(2')
          -pi/3 pi/3;     % q(2'')
          -pi/3 pi/3;     % q(2'''')
-     3*0.0254 15.0*0.0254;    % q(3)
+           0    0.24;    % q(3)
          -pi   pi;  % q(4)
         -pi/2  pi/2;  % q(5)
         -pi/3  pi/3;  % q(6)

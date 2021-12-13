@@ -894,10 +894,10 @@ JOINT tool yaw link-tool gripper1 link:
     low: 0.0
   enable feedback: false
   passive: false
-  controller:
-    P: 10.0
-    I: 0.0
-    D: 0.2
+  # controller:
+  #   P: 10.0
+  #   I: 0.0
+  #   D: 0.2
   controller output type: VELOCITY
   type: revolute
   max motor impulse: 50.0
@@ -928,10 +928,10 @@ JOINT tool yaw link-tool gripper2 link:
     low: 0.0
   enable feedback: false
   passive: false
-  controller:
-    P: 10.0
-    I: 0.0
-    D: 0.2
+  # controller:
+  #   P: 10.0
+  #   I: 0.0
+  #   D: 0.2
   controller output type: VELOCITY
   type: revolute
   max motor impulse: 50.0

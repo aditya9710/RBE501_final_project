@@ -3,6 +3,8 @@ import time
 import rospy
 from ambf_client import Client
 import os
+from matplotlib import pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 
 #### Mapping for psm_verticle
 class PSMJointMapping:
@@ -46,6 +48,9 @@ class connectionTest():
         self.counter = 0
         print(num_joint)
         print(joint_name)
+        self.x = []
+        self.y = []
+        self.z = []
 
     def load_data(self):
         csv_file = self.parent_folder + '/' + self.csv_name
@@ -71,6 +76,24 @@ class connectionTest():
         self.jp_values = csv_output
         return csv_output
 
+    def load_path(self, file_name):
+        csv_file = self.parent_folder + '/' + file_name
+        x_d = []
+        y_d = []
+        z_d = []
+        #
+        with open(csv_file) as f:
+            content = f.readlines()
+            for num_pts in range(len(content)):
+                content_row = content[num_pts].split('\n')[0].split(',')
+                x = float(content_row[0])
+                y = float(content_row[1])
+                z = float(content_row[2])
+                x_d.append(x)
+                y_d.append(y)
+                z_d.append(z)
+        return x_d, y_d, z_d
+
     def servo_jp(self, jp):
         self.base.set_joint_pos(0, jp[0])
         self.base.set_joint_pos(1, jp[1])
@@ -80,6 +103,7 @@ class connectionTest():
         self.base.set_joint_pos(5, jp[5])
         self.base.set_joint_pos(6, 0)
         self.base.set_joint_pos(7, 0)
+        rospy.sleep(0.02)
 
     def servo_jf(self):
         self.base.set_joint_pos(0, 0)
@@ -111,8 +135,10 @@ class connectionTest():
         elif self.counter < num_data:
             self.servo_jp(self.jp_values[self.counter])
             self.counter = self.counter + 1
-            a = self.tip.get_pos()
-            print(a)
+            coord = self.tip.get_pos()
+            self.x.append(coord.x)
+            self.y.append(coord.y)
+            self.z.append(coord.z)
         else:
             pass
 
@@ -120,6 +146,7 @@ class connectionTest():
     def run_pos(self):
         self.load_data()
         self.update_pose()
+        return self.x, self.y, self.z
 
     def run_gravity(self):
         self.servo_jp([0,0,1,0,0,0])
@@ -128,16 +155,65 @@ class connectionTest():
 
 
 if __name__ == '__main__':
-    name_file = 'JointPos_circle.csv'
-    # name_file = 'JointPos_line.csv'
+    ### draw a straight line
+    joint_file = 'JointPos_line.csv'
+    path_file = 'Path_line.csv'
+
+    ### draw a circle
+    # joint_file = 'JointPos_circle.csv'
+    # path_file = 'Path_circle.csv'
     c = Client()
     c.connect()
-    Test = connectionTest(c, 'psm1', name_file)
+    Test = connectionTest(c, 'psm1', joint_file)
     rate = rospy.Rate(200)
-    while not rospy.is_shutdown():
-        try:
-            Test.run_pos()
-            # Test.run_gravity()
-        except KeyboardInterrupt:
-            print('stop!')
+    # while not rospy.is_shutdown():
+    #     try:
+    #         x, y, z = Test.run_pos()
+    #         # Test.run_gravity()
+    #     except KeyboardInterrupt:
+    #         print('stop!')
+    #     rate.sleep()
+    n_iter = 0
+    while n_iter < 500:
+        x, y, z = Test.run_pos()
+        n_iter = n_iter + 1
         rate.sleep()
+
+    x_d, y_d, z_d = Test.load_path(path_file)
+    fig = plt.figure(1)
+    plt.rcParams.update({'font.size': 14})
+    ax = plt.axes(projection='3d')
+    N_remove = 40
+    ax.scatter3D(x[N_remove:], y[N_remove:], z[N_remove:], 'r', label='actual')
+    ax.scatter3D(x_d[N_remove:], y_d[N_remove:], z_d[N_remove:], 'b', label='desired')
+    # ax.set_aspect('equal', 'box') can uncomment when plotting circle
+    ax.legend(fontsize=16)
+    ax.set_title('path', fontsize=24)
+    ax.set_xlabel('X (m)', fontsize=20)
+    ax.set_ylabel('Y (m)', fontsize=20)
+    ax.set_zlabel('Z (m)', fontsize=20)
+
+    fig2 = plt.figure(2)
+    plt.rcParams.update({'font.size': 12})
+    ax1 = fig2.add_subplot(311)
+    ax1.plot(x[N_remove:], 'r', label='actual')
+    ax1.plot(x_d[N_remove:], 'b', label='desired')
+    ax1.legend(fontsize=12)
+    ax1.set_title('X', fontsize=20)
+    ax1.set_ylabel('value (m)', fontsize=14)
+    ax1.grid()
+    ax2 = fig2.add_subplot(312)
+    ax2.plot(y[N_remove:], 'r', label='actual')
+    ax2.plot(y_d[N_remove:], 'b', label='desired')
+    ax2.legend(fontsize=12)
+    ax2.set_title('Y', fontsize=20)
+    ax2.set_ylabel('value (m)', fontsize=14)
+    ax2.grid()
+    ax3 = fig2.add_subplot(313)
+    ax3.plot(z[N_remove:], 'r', label='actual')
+    ax3.plot(z_d[N_remove:], 'b', label='desired')
+    ax3.legend(fontsize=12)
+    ax3.set_title('Z', fontsize=20)
+    ax3.set_xlabel('time (ms)', fontsize=14)
+    ax3.set_ylabel('value (m)', fontsize=14)
+    ax3.grid()

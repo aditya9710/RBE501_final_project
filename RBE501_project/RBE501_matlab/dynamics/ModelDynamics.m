@@ -9,10 +9,8 @@ n = 6;
 format short
 l_RCC = 4.389;
 l_tool = 4.16;
-% l_insert = 2.31;
 l_Pitch2Yaw = 0.09;
-l_Yaw2CtrlPnt = 0.1;
-% l_tip = 0.139;
+l_Yaw2CtrlPnt = 0.106;
 
 q = zeros(1,n);
 d3 = q(3);
@@ -34,7 +32,6 @@ robot = SerialLink([RevoluteMDH('a', 0, 'd', 0, 'alpha', pi/2, 'offset', pi/2), 
                     RevoluteMDH('a', 0, 'd', 0, 'alpha', -pi/2, 'offset', -pi/2), ...           %q(5)
                     RevoluteMDH('a', l_Pitch2Yaw, 'd', 0, 'alpha', -pi/2, 'offset', -pi/2)], ... %q(6)
                     'name', '6 DoF dVRK');
-%                     RevoluteMDH('a', 0, 'd', 0.0102, 'alpha', -pi/2, 'offset', pi/2)], ...           %q(7)
 
 qlim = [-pi/2  pi/2;  % q(1)
         -pi/3  pi/3;  % q(2)
@@ -42,8 +39,6 @@ qlim = [-pi/2  pi/2;  % q(1)
         -pi/2  pi/2;  % q(4)
       -2*pi/5  2*pi/5;  % q(5)
         -pi/2  pi/2];  % q(6)
-%          0     0]; % q(7)
-%         -pi/12 pi/12];  % q(8)    
        
 for i = 1:size(qlim,1)
     robot.links(i).qlim = qlim(i,:);
@@ -238,14 +233,15 @@ J_a = jacoba(S, M, currentQ);
 % Generate a path to follow
 fprintf('Generating task space path... ');
 t = linspace(0, 2*pi, nPts);
-x = 0.5 * cos(t)+1;
-y = 0.5 * sin(t)+1;
-z = -1.3 * ones(1, nPts);
-% x = ones(1, nPts);
-% y = 0.25 * t;
-% z = -1.4 * ones(1, nPts) ;
+% x = 0.5 * cos(t) + 0.8 ;
+% y = 0.5 * sin(t) + 0.8 ;
+% z = -0.8 * ones(1, nPts);
+x = 0.5 * ones(1, nPts);
+y = 0.2 * t - 0.3;
+z = -1.0 * ones(1, nPts) ;
 path = [x; y; z];
 fprintf('Done.\n');
+% csvwrite('Path.csv',path');
 
 fprintf('Calculating the Inverse Kinematics... ');
 robot.plot(currentQ(1:6));
@@ -277,9 +273,11 @@ end
 fprintf('Done.\n');
 
 %printing data for export to AMBF
-fprintf('\n\n%d Joint positions (7 joint angles for each position\n', nPts)
+fprintf('\n\n%d Joint positions (7 joint angles for each position) \n', nPts)
 % disp(currentQ_store);    % 20 Joint positions displayed (7 joint angles for each position)
-csvwrite('JointPos.csv',currentQ_store);
+% csvwrite('JointPos.csv',currentQ_store);
+
+%% Dynamics
 
 % Now, for each pair of consecutive set points, we will first calculate a
 % trajectory between these two points, and then calculate the torque
