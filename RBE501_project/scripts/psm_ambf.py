@@ -168,14 +168,16 @@ if __name__ == '__main__':
     Test = connectionTest(c, 'psm1', joint_file)
     rate = rospy.Rate(200)
 
-    print('### Gravity Compensation ###')
-    while not rospy.is_shutdown():
-        try:
-            # Test.servo_jp([0,0,0,0,0,0])
-            Test.run_gravity()
-        except KeyboardInterrupt:
-            print('stop!')
-        rate.sleep()
+
+    ### gravity compensation
+    # print('### Gravity Compensation ###')
+    # while not rospy.is_shutdown():
+    #     try:
+    #         # Test.servo_jp([0,0,0,0,0,0])
+    #         Test.run_gravity()
+    #     except KeyboardInterrupt:
+    #         print('stop!')
+    #     rate.sleep()
 
     n_iter = 0
     while n_iter < 500:

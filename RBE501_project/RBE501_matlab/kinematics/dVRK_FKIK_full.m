@@ -396,7 +396,7 @@ hold on
 scatter3(path(1,:), path(2,:), path(3,:), 'filled','MarkerFaceColor','#ffb300');
 title('home configuration')
 
-% figure(5)
-% set(gcf,'Position',[1000 50 900 900])
-% title('plot crown')
-% robot_wpi.plot(qList_full, 'trail', {'LineWidth',5, 'Color','#FF6700'});
+figure(5)
+set(gcf,'Position',[1000 50 900 900])
+title('plot crown')
+robot_wpi.plot(qList_full(1:10:end,:), 'trail', {'LineWidth',5, 'Color','#FF6700'});
