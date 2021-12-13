@@ -9,10 +9,10 @@ n = 6;
 format short
 l_RCC = 4.389;
 l_tool = 4.16;
-l_insert = 2.31;
+% l_insert = 2.31;
 l_Pitch2Yaw = 0.09;
 l_Yaw2CtrlPnt = 0.1;
-l_tip = 0.139;
+% l_tip = 0.139;
 
 q = zeros(1,n);
 d3 = q(3);
@@ -102,13 +102,13 @@ M = [R p; zeros(1,3) 1]
 
 
 % Link frames in the home configuration
-M01 = [eye(3), [0;0;0]; [0 0 0 1]]; % Pose of link {1} in frame {0}
-M12 = [eye(3), [0;0;0]; [0 0 0 1]]; % Pose of link {2} in frame {1}
-M23 = [[1,0,0;0,-1,0;0,0,-1] [0; 0; l_RCC]; [ 0 0 0 1]]; % Pose of link {3} in frame {4}
-M34 = [eye(3), [0; 0; l_insert]; [ 0 0 0 1]]; % Pose of link {4} in frame {3}
-M45 = [[1,0,0;0,0,-1;0,1,0], [0;0;((l_RCC - l_insert)-(l_RCC - l_tool))]; [0 0 0 1]]; % Pose of link {5} in frame {4}
-M56 = [eye(3), [0; l_Pitch2Yaw; 0]; [0 0 0 1]]; % Pose of link {6} in frame {5}
-M67 = [eye(3), [0; l_Yaw2CtrlPnt; 0]; [0 0 0 1]]; % Pose of link {7} in frame {6}
+M01 = [rotx(90) [0;0;0]; [0 0 0 1]]; % Pose of link {1} in frame {0}
+M12 = [roty(-90) [0;0;0]; [0 0 0 1]]; % Pose of link {2} in frame {1}
+M23 = [rotx(90) [0; (l_RCC/2); 0]; [ 0 0 0 1]]; % Pose of link {3} in frame {4}
+M34 = [eye(3) [0; 0; (-l_RCC/2)+((l_tool)/2)]; [ 0 0 0 1]]; % Pose of link {4} in frame {3}
+M45 = [rotx(-90)  [0;0;0]; [0 0 0 1]]; % Pose of link {5} in frame {4}
+M56 = [roty(90) [0; -(((l_tool)/2) + (l_Pitch2Yaw)/2); 0]; [0 0 0 1]]; % Pose of link {6} in frame {5}
+M67 = [[0 1 0; 0 0 -1; -1 0 0] [0; -((l_Pitch2Yaw/2)+l_Yaw2CtrlPnt); 0]; [0 0 0 1]]; % Pose of link {7} in frame {6}
 
 M1 = M01;            % Pose of link {1} in frame {0}
 M2 = M1 * M12;  % Pose of link {2} in frame {0}
@@ -192,19 +192,6 @@ qd0 = zeros(n,1); % initial velocities
 % q0(4) = 0.5;
 
 % Invoke the `GravityForces` function. This function calculates the inverse
-% dynamics of the robot when the robot is not moving and the only force%% Inverse Dynamics: Gravity Compensation
-% We will now calculate the joint torques necessary for the robot to stay
-% in place, i.e., not fall under its own weight.
-fprintf('---------------------------Gravity Compensation-------------------------\n');
-
-q0 = zeros(n,1);  % initial configuration 
-qd0 = zeros(n,1); % initial velocities
-% q0(1) = 0.2;
-% q0(2) = 0.2;
-% q0(3) = 1;
-% q0(4) = 0.5;
-
-% Invoke the `GravityForces` function. This function calculates the inverse
 % dynamics of the robot when the robot is not moving and the only force
 % acting on it is gravity.
 grav = GravityForces(q0, g, Mlist, Glist, S);
@@ -227,26 +214,6 @@ intRes = 8;       % Euler integration step
 title('Gravity Compensation');
 robot.plot(qt);
 
-% acting on it is gravity.
-grav = GravityForces(q0, g, Mlist, Glist, S);
-
-fprintf('Joint Torques: ');
-fprintf('[%f %f %f %f %f %f %f] Nm\n', grav(1), grav(2), grav(3), grav(4), grav(5), grav(6));
-
-% Simulate for 5 seconds
-tf = 5;           % total simulation time
-dt = 0.05;        % time step
-taumat = repmat(grav', [tf/dt 1]);   % apply only the torque required for gravity comp
-Ftipmat = zeros(size(taumat, 1), 6); % end effector wrench
-intRes = 8;       % Euler integration step
-
-% Invoke the `ForwardDynamicsTrajectory` to simulate the robot motion.
-[qt,~] = ForwardDynamicsTrajectory(q0, qd0, taumat, g, ...
-                                   Ftipmat, Mlist, Glist, S, dt, ...
-                                   intRes);
-
-title('Gravity Compensation');
-robot.plot(qt(1:10:end,:));
 % 
 % input('Simulation complete. Press Enter to continue.');
 
