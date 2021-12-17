@@ -1,4 +1,4 @@
-# RBE501_final_project
+# RBE501 Final Project
 
 ### How to Run
 
